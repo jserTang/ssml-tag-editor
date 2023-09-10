@@ -12,10 +12,13 @@ interface IProps {
 export const SSMLInput = (props: IReactNodeProps & IProps) => {
     const [showInput, setShowInput] = useState(true);
     const valueRef = useRef(props.value);
+    const inputRef = useRef<HTMLInputElement>(null);
     valueRef.current = props.value;
 
     useEffect(() => {
-        if (!showInput && !valueRef.current.trim()) {
+        if (showInput) {
+            inputRef.current.focus();
+        } else if (!valueRef.current.trim()) {
             props.onRemove();
         }
     }, [showInput]);
@@ -43,6 +46,7 @@ export const SSMLInput = (props: IReactNodeProps & IProps) => {
             </If>
             <If condition={showInput}>
                 <input
+                    ref={inputRef}
                     className="ssml-tag-value-select__input"
                     autoFocus
                     type="text"

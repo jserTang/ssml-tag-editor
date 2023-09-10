@@ -44,6 +44,7 @@
 
     .ProseMirror {
         min-height: 200px;
+        outline: none;
     }
 
     line-height: 20px;
@@ -104,7 +105,7 @@
             }
         }
     }
-    .node-say-as, .node-break, .node-phoneme {
+    .node-say-as, .node-break, .node-phoneme, .node-sub {
         display: inline-block;
     }
 }
