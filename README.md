@@ -76,10 +76,6 @@ const Demo = () => {
 };
 ```
 
-<video id="video" controls="" preload="none" poster="demo">
-      <source id="mp4" src="https://statics-umu-cn.umucdn.cn/resource/a/8KjU/rK1pr/3784454790.mp4" type="video/mp4">
-</videos>
-
 ## Browsers support 浏览器支持
 IE11+
 
