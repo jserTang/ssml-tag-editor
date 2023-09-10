@@ -1,12 +1,14 @@
 {
   "name": "ssml-tag-editor",
-  "version": "1.0.0",
+  "version": "1.0.4",
   "description": "SSML tag editor;Generate SSML with rich text editing;Text-to-Speech editor",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "typings": "./dist/index.d.ts",
   "scripts": {
     "start": "npx webpack serve --mode=development --progress --config ./webpack.config.js",
     "build": "rm -rf dist && npx webpack --mode=production --progress --config ./webpack.config.js",
+    "pub": "npm run build && npm publish"
   },
   "dependencies": {
     "@tiptap/extension-character-count": "2.0.4",
