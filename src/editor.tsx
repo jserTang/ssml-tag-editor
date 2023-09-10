@@ -33,17 +33,22 @@ export interface IEditorHandler {
      * Market number interpret
      * 标记数字读法
      */
-    addNumberInterpret(config: { numberInterpret: NumberInterpret; validate?: (text: string) => boolean }): void;
+    addNumberInterpret(config?: { numberInterpret: NumberInterpret; validate?: (text: string) => boolean }): void;
     /**
      * Mark a silent pause
      * 标记停顿
      */
-    addBreak(config: { time?: string; validate?: (pos: number) => boolean }): void;
+    addBreak(config?: { time?: string; validate?: (pos: number) => boolean }): void;
     /**
      * Mark the pronunciation of English words or Chinese polyphonics
      * 标记英文单词或中文多音字的发音。
      */
     addPhoneme(config?: { phoneme?: string; validate?: (text: string) => boolean }): void;
+    /**
+     * Mark the pronunciation of English words or Chinese polyphonics
+     * 
+     */
+    addSub(config?: { alias?: string; validate?: (text: string) => boolean }): void;
     /**
      * Get the SSML of the selected text
      */
@@ -87,13 +92,13 @@ const SSMLTagEditor = memo(
         const [helper] = useEditorHelper(editor);
 
         const addNumberInterpret = (config: {
-            numberInterpret: NumberInterpret;
+            numberInterpret?: NumberInterpret;
             validate?: (text: string) => boolean;
-        }) => {
+        } = {}) => {
             if (!editor) {
                 return;
             }
-            const { numberInterpret, validate } = config;
+            const { numberInterpret = 'digits', validate } = config;
             const selectionText = helper.getSelectionText();
             const isNum = /^\d+$/.test(selectionText);
 
@@ -118,7 +123,7 @@ const SSMLTagEditor = memo(
             }
         };
 
-        const addBreak = (config: { time?: string; validate?: (pos: number | null) => boolean }) => {
+        const addBreak = (config: { time?: string; validate?: (pos: number | null) => boolean } = {}) => {
             const { time = '0.5s', validate } = config;
             if (!editor) {
                 return;
@@ -165,7 +170,7 @@ const SSMLTagEditor = memo(
                   });
         };
 
-        const setSub = (config: { alias?: string; validate?: (text: string) => boolean } = {}) => {
+        const addSub = (config: { alias?: string; validate?: (text: string) => boolean } = {}) => {
             const { alias = '', validate } = config;
             if (!editor) {
                 return;
@@ -198,7 +203,7 @@ const SSMLTagEditor = memo(
                 helper,
                 addBreak,
                 addPhoneme,
-                setSub,
+                addSub,
                 getSelectionSSML,
                 addNumberInterpret,
                 export() {

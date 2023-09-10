@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "alwaysStrict": true,
+    "jsx": "react",
+    "target": "es5",
+    "module": "ES6",
+    "lib": [
+      "dom",
+      "es2015"
+    ],
+    "noEmitHelpers": true,
+    "importHelpers": true,
+    "declaration": true,
+    "declarationDir": "dist",
+    "typeRoots": [
+      "./node_modules/@types",
+      "./types"
+    ],
+    "moduleResolution": "node",
+    "baseUrl": "src/",
+    "esModuleInterop": true,
+    "paths": {
+      "*": [
+        "*",
+        "src/*"
+      ]
+    },
+  },
+  "exclude": ["node_modules"]
+}
