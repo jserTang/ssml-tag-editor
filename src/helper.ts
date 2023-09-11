@@ -1,20 +1,6 @@
 import { Range, Editor, JSONContent } from '@tiptap/core';
 import { getSelectionTextIncludeTag, isSSMLTag, getNodeSSML } from './utils';
 
-export interface IHelper {
-    deleteSelection(): void;
-    setTextSelection(range: Range | number): void;
-    getSelectionPos(): { from: number; to: number };
-    getSelectionText(): string;
-    getSelectionSSML(): { ssml: string; from: number; to: number };
-    formatNodeToSSML(node: JSONContent): string;
-    formatJsonToSSML(json: JSONContent): string;
-    exportHTML(): string;
-    exportSSML(): string;
-    exportText(): string;
-    exportJSON(): JSONContent;
-}
-
 export const useEditorHelper = (editor: Editor | null) => {
     return [
         {

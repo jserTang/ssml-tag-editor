@@ -1,66 +1,22 @@
 import './index.scss';
-import React, { memo, forwardRef, useImperativeHandle } from 'react';
-import { Editor } from '@tiptap/core';
+import React, { forwardRef, useImperativeHandle } from 'react';
 import StarterKit from '@tiptap/starter-kit';
 import { useEditor, EditorContent, Extensions } from '@tiptap/react';
-import { message } from 'antd';
 import { throttle } from './utils';
 import { SubTag } from './extensions/sub';
 import { SayAsTag } from './extensions/sayAs';
 import { BreakTag } from './extensions/break';
 import createLang, { defaultI18n } from './i18n';
 import { PhonemeTag } from './extensions/phoneme';
-import { IHelper, useEditorHelper } from './helper';
+import { useEditorHelper } from './helper';
 import { SSMLTagEditorContext } from './context';
-import { NumberInterpret, IExportData, Language, TAlphabet } from './types';
+import { NumberInterpret, TAlphabet, IProps, IEditorHandler } from './types';
 
-interface IProps {
-    placeholder?: string;
-    defaultContent?: string;
-    language?: Language;
-    i18n?: { [text: string]: { [lang: string]: string } };
-    onSelection?(text: string): void;
-    onUpdate?(data: { text: string; ssml: string }): void;
-    onFocus?: VoidFunction;
-    onBlur?: VoidFunction;
-}
-
-export interface IEditorHandler {
-    helper: IHelper;
-    editor: Editor | null;
-    export(): IExportData;
-    /**
-     * Market number interpret
-     * 标记数字读法
-     */
-    addNumberInterpret(config?: { numberInterpret: NumberInterpret; validate?: (text: string) => boolean }): void;
-    /**
-     * Mark a silent pause
-     * 标记停顿
-     */
-    addBreak(config?: { time?: string; validate?: (pos: number) => boolean }): void;
-    /**
-     * Mark the pronunciation of English words or Chinese polyphonics
-     * 标记英文单词或中文多音字的发音。
-     */
-    addPhoneme(config?: { phoneme?: string; validate?: (text: string) => boolean }): void;
-    /**
-     * Mark the pronunciation of English words or Chinese polyphonics
-     * 
-     */
-    addSub(config?: { alias?: string; validate?: (text: string) => boolean }): void;
-    /**
-     * Get the SSML of the selected text
-     */
-    getSelectionSSML(): { ssml: string; from: number; to: number };
-}
-
-const SSMLTagEditor = memo(
+const SSMLTagEditor = 
     forwardRef((props: IProps, ref: React.Ref<IEditorHandler>) => {
         const extensions: Extensions = [StarterKit, SayAsTag, BreakTag, PhonemeTag, SubTag];
         const { language = 'en_us', i18n = defaultI18n } = props;
         const lang = createLang(language, i18n);
-        const [messageApi, contextHolder] = message.useMessage();
 
         const editor = useEditor({
             extensions,
@@ -107,15 +63,9 @@ const SSMLTagEditor = memo(
             }
 
             if (!selectionText.length) {
-                messageApi.open({
-                    type: 'warning',
-                    content: lang('Select the number first'),
-                });
+                alert(lang('Select the number first'));
             } else if (!validate && !isNum) {
-                messageApi.open({
-                    type: 'warning',
-                    content: lang('Only numbers can be selected'),
-                });
+                alert(lang('Only numbers can be selected'));
             } else {
                 (editor.chain().focus() as any)
                     .setNumberInterpret(selectionText, { 'interpret-as': numberInterpret })
@@ -132,10 +82,7 @@ const SSMLTagEditor = memo(
             if (!editor.isFocused || from !== to) {
                 validate
                     ? validate(null)
-                    : messageApi.open({
-                          type: 'warning',
-                          content: lang('Please select where you want to add a pause'),
-                      });
+                    : alert(lang('Please select where you want to add a pause'));
                 return;
             }
             if (validate) {
@@ -164,10 +111,7 @@ const SSMLTagEditor = memo(
             }
             !!selectionText.length
                 ? addPhonemeTag()
-                : messageApi.open({
-                      type: 'warning',
-                      content: lang('Please select characters first'),
-                  });
+                : alert(lang('Please select characters first'));
         };
 
         const addSub = (config: { alias?: string; validate?: (text: string) => boolean } = {}) => {
@@ -187,44 +131,37 @@ const SSMLTagEditor = memo(
             }
             !!selectionText.length
                 ? addSubTag()
-                : messageApi.open({
-                      type: 'warning',
-                      content: lang('Please select characters first'),
-                  });
+                : alert(lang('Please select characters first'));
         };
 
         const getSelectionSSML = () => {
             return helper.getSelectionSSML();
         };
 
-        useImperativeHandle(ref, () => {
-            return {
-                editor,
-                helper,
-                addBreak,
-                addPhoneme,
-                addSub,
-                getSelectionSSML,
-                addNumberInterpret,
-                export() {
-                    return {
-                        text: helper.exportText(),
-                        json: helper.exportJSON(),
-                        ssml: helper.exportSSML(),
-                    };
-                },
-            };
-        });
+        useImperativeHandle(ref, () => ({
+            editor,
+            helper,
+            addBreak,
+            addPhoneme,
+            addSub,
+            getSelectionSSML,
+            addNumberInterpret,
+            export() {
+                return {
+                    text: helper.exportText(),
+                    json: helper.exportJSON(),
+                    ssml: helper.exportSSML(),
+                };
+            },
+        }));
 
         return (
             <div className="ssml-tag-editor">
-                {contextHolder}
                 <SSMLTagEditorContext.Provider value={{ state: { language, i18n } }}>
                     <EditorContent editor={editor} placeholder={props.placeholder} />
                 </SSMLTagEditorContext.Provider>
             </div>
         );
-    }),
-);
+    });
 
 export default SSMLTagEditor;

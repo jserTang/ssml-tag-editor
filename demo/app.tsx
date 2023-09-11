@@ -1,5 +1,5 @@
 import './app.scss';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import React, { useRef, useState } from 'react';
 import SSMLTagEditor, { ToolBarWrap, IEditorHandler } from '../src/index';
 
@@ -20,7 +20,7 @@ const APP = () => {
         editorHandler.current?.addPhoneme();
     };
     const exportSSML = () => {
-        setSSML(editorHandler.current.export().ssml);
+        setSSML(editorHandler.current!.export().ssml);
     };
 
     return (
@@ -59,7 +59,6 @@ const APP = () => {
     );
 };
 
-ReactDOM.render(
-    <APP/>,
-    document.body
-);
+const root = createRoot(document.querySelector('#root'));
+
+root.render(<APP/>);

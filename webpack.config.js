@@ -5,28 +5,30 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const ReactRefreshWebpackPlugin = require("@pmmmwh/react-refresh-webpack-plugin");
 const { HotModuleReplacementPlugin } = require("webpack");
+
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
+const isDevelopment = process.env.NODE_ENV != "production";
 
-
-
-// 基于 webpack5 的配置，代码入口为 ./src/index.ts, 支持 webpack-dev-server, 支持 sass，支持对 React 的编译，支持typescrict， 支持热更新。output 目录为 ./dist，产出为 es5 的代码
 module.exports = (env, arg) => {
-  const isDevelopment = arg.mode !== "production";
-  console.log("------------------- isDevelopment: ", arg);
+  console.log("------------------- isDevelopment: ", process.env.NODE_ENV);
 
   return {
-    mode: "development",
+    mode: 'development' || process.env.NODE_ENV,
     entry: isDevelopment ? "./demo/app.tsx" : "./src/index.ts",
     output: {
       filename: "index.js",
-      path: __dirname + "/dist",
+      path: path.resolve(__dirname, "dist"),
       clean: true,
       library: {
-        name: "SSMLTagEditor",
-        type: "umd",
+        // name: "ssml-tag-editor",
+        type: "module",
       },
     },
+    experiments: {
+      outputModule: true,
+    },
     resolve: {
+      symlinks: false,
       extensions: [".tsx", ".ts", ".js"],
     },
     module: {
@@ -36,8 +38,10 @@ module.exports = (env, arg) => {
           use: [
             isDevelopment ? "style-loader" : MiniCssExtractPlugin.loader,
             "css-loader",
+            "postcss-loader",
             "sass-loader",
           ],
+          exclude: /node_modules/,
         },
         {
           test: /\.tsx?$/,
@@ -54,9 +58,8 @@ module.exports = (env, arg) => {
           hash: true,
           filename: "index.html",
       }),
-  
       new MiniCssExtractPlugin({
-        filename: "[name].css",
+        filename: "index.css",
         chunkFilename: "[id].css",
       }),
       new ForkTsCheckerWebpackPlugin(),
@@ -74,6 +77,6 @@ module.exports = (env, arg) => {
       hot: true,
     },
 
-    devtool: isDevelopment ? "eval-source-map" : false,
+    devtool: 'eval-cheap-module-source-map' || isDevelopment ? "eval-cheap-module-source-map" : false,
   }
 };
