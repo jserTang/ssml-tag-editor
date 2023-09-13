@@ -13,16 +13,19 @@ module.exports = (env, arg) => {
   console.log("------------------- isDevelopment: ", process.env.NODE_ENV);
 
   return {
-    mode: process.env.NODE_ENV,
+    mode: 'development' || process.env.NODE_ENV,
     entry: isDevelopment ? "./demo/app.tsx" : "./src/index.ts",
     output: {
       filename: "index.js",
       path: path.resolve(__dirname, "dist"),
       clean: true,
       library: {
-        name: "ssml-tag-editor",
-        type: "umd",
+        // name: "ssml-tag-editor",
+        type: "module",
       },
+    },
+    experiments: {
+      outputModule: true,
     },
     resolve: {
       symlinks: false,
@@ -74,6 +77,6 @@ module.exports = (env, arg) => {
       hot: true,
     },
 
-    devtool: isDevelopment ? "inline-source-map" : false,
+    devtool: 'eval-cheap-module-source-map' || isDevelopment ? "eval-cheap-module-source-map" : false,
   }
 };

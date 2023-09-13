@@ -1,5 +1,5 @@
 import './index.scss';
-import React, { memo, forwardRef, useImperativeHandle } from 'react';
+import React, { forwardRef, useImperativeHandle } from 'react';
 import StarterKit from '@tiptap/starter-kit';
 import { useEditor, EditorContent, Extensions } from '@tiptap/react';
 import { throttle } from './utils';
@@ -12,7 +12,7 @@ import { useEditorHelper } from './helper';
 import { SSMLTagEditorContext } from './context';
 import { NumberInterpret, TAlphabet, IProps, IEditorHandler } from './types';
 
-const SSMLTagEditor = memo(
+const SSMLTagEditor = 
     forwardRef((props: IProps, ref: React.Ref<IEditorHandler>) => {
         const extensions: Extensions = [StarterKit, SayAsTag, BreakTag, PhonemeTag, SubTag];
         const { language = 'en_us', i18n = defaultI18n } = props;
@@ -138,24 +138,22 @@ const SSMLTagEditor = memo(
             return helper.getSelectionSSML();
         };
 
-        useImperativeHandle(ref, () => {
-            return {
-                editor,
-                helper,
-                addBreak,
-                addPhoneme,
-                addSub,
-                getSelectionSSML,
-                addNumberInterpret,
-                export() {
-                    return {
-                        text: helper.exportText(),
-                        json: helper.exportJSON(),
-                        ssml: helper.exportSSML(),
-                    };
-                },
-            };
-        });
+        useImperativeHandle(ref, () => ({
+            editor,
+            helper,
+            addBreak,
+            addPhoneme,
+            addSub,
+            getSelectionSSML,
+            addNumberInterpret,
+            export() {
+                return {
+                    text: helper.exportText(),
+                    json: helper.exportJSON(),
+                    ssml: helper.exportSSML(),
+                };
+            },
+        }));
 
         return (
             <div className="ssml-tag-editor">
@@ -164,7 +162,6 @@ const SSMLTagEditor = memo(
                 </SSMLTagEditorContext.Provider>
             </div>
         );
-    }),
-);
+    });
 
 export default SSMLTagEditor;

@@ -1,6 +1,6 @@
 {
   "name": "ssml-tag-editor",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "SSML tag editor;Generate SSML with rich text editing;Text-to-Speech editor",
   "main": "./dist/index.js",
   "types": "./dist/src/index.d.ts",
