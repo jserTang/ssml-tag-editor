@@ -1,11 +1,11 @@
 import { Range, Editor, JSONContent } from '@tiptap/core';
-import { getSelectionTextIncludeTag, isSSMLTag, getNodeSSML } from './utils';
+import { getSelectionText, isSSMLTag, getNodeSSML } from './utils';
 
 export const useEditorHelper = (editor: Editor | null) => {
     return [
         {
             deleteSelection() {
-                editor && editor.commands.deleteSelection();
+                return editor && editor.commands.deleteSelection();
             },
             setTextSelection(range: Range | number) {
                 editor && editor.commands.setTextSelection(range);
@@ -21,13 +21,12 @@ export const useEditorHelper = (editor: Editor | null) => {
                 if (!editor || !editor.state.selection) {
                     return '';
                 }
-                let text = '';
                 const { from, to } = editor.state.selection;
                 if (from !== to) {
-                    text = editor.state.doc.textBetween(from, to);
+                    return getSelectionText(editor.getJSON(), from, to);
                 }
 
-                return text;
+                return '';
             },
             getSelectionSSML() {
                 if (!editor) {
@@ -36,9 +35,47 @@ export const useEditorHelper = (editor: Editor | null) => {
                 const { from, to } = editor.state.selection;
                 let selectionSSML = '';
                 if (from !== to) {
-                    selectionSSML = getSelectionTextIncludeTag(editor.getJSON(), from, to);
+                    selectionSSML = getSelectionText(editor.getJSON(), from, to, true);
                 }
                 return { ssml: selectionSSML, from, to };
+            },
+            getTagsInSelection() {
+                const tags: any[] = [];
+                if (!editor) {
+                    return tags;
+                }
+                const { from, to } = editor.state.selection;
+                let currentPos = 1;
+                if (from !== to) {
+                    const json = editor.getJSON();
+                    const tagFilter = (node: JSONContent) => {
+                        if (currentPos >= to) {
+                            return;
+                        }
+                        let inRange = currentPos >= from && currentPos < to;
+                        if (isSSMLTag(node.type)) {
+                            currentPos += 1;
+                            inRange && tags.push(node);
+                        } else if (node.type === 'text' || node.text) {
+                            const text = node.text || '';
+                            for (let i = 0; i < text.length; i++) {
+                                currentPos++;
+                            }
+                        } else if (node.type === 'hard_break' || node.type === 'hardBreak') {
+                            currentPos += 1;
+                        } else if (node.type === 'paragraph' && !node.content) {
+                            currentPos += 2;
+                        } else {
+                            if (Array.isArray(node.content)) {
+                                node.content.forEach(tagFilter);
+                                currentPos += 2;
+                            }
+                        }
+                    };
+
+                    (json.content || []).forEach(tagFilter);
+                }
+                return tags;
             },
             formatNodeToSSML(node: JSONContent) {
                 let content = '';

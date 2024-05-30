@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 export const ToolBarWrap = ({children, className = ''}: {children: JSX.Element | JSX.Element[]; className?: string}) => {
     return (

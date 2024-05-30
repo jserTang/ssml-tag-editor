@@ -65,9 +65,7 @@ export interface IReactNodeProps {
     updateAttributes: (attrs: { [key: string]: any }) => void;
 }
 
-export interface IMarkerSelectorProps extends IReactNodeProps {
-    remove: (attrName: string) => void;
-}
+export interface IMarkerSelectorProps extends IReactNodeProps {}
 
 export type NumberInterpret = 'digits' | 'cardinal' | 'telephone';
 

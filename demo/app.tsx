@@ -1,6 +1,7 @@
 import './app.scss';
 import { createRoot } from 'react-dom/client';
-import React, { useRef, useState } from 'react';
+import * as React from 'react';
+const { useRef, useState } = React;
 import SSMLTagEditor, { ToolBarWrap, IEditorHandler } from '../src/index';
 
 const APP = () => {
@@ -20,25 +21,25 @@ const APP = () => {
         editorHandler.current?.addPhoneme();
     };
     const exportSSML = () => {
-        setSSML(editorHandler.current!.export().ssml);
+        setSSML(editorHandler.current?.export().ssml);
     };
 
     return (
         <div className="ssml-tag-editor-demo">
             <ToolBarWrap className="ssml-tag-editor-demo__tools">
-                <button onClick={addNumberInterpret}>
-                    <div>add phoneme</div>
+                <button onClick={addNumberInterpret} className="menu-number">
+                    <div>add number interpret</div>
                     <div>标注数字读法</div>
                 </button>
-                <button onClick={addBreak}>
+                <button onClick={addBreak} className="menu-break">
                     <div>add break</div>
                     <div>添加停顿</div>
                 </button>
-                <button onClick={addSub}>
+                <button onClick={addSub} className="menu-sub">
                     <div>add sub</div>
                     <div>文字替换</div>
                 </button>
-                <button onClick={addPhoneme}>
+                <button onClick={addPhoneme} className="menu-ph">
                     <div>add phoneme</div>
                     <div>标注读音</div>
                 </button>
@@ -46,7 +47,7 @@ const APP = () => {
 
             <SSMLTagEditor
                 ref={editorHandler}
-                defaultContent="2023 年，生成式 AI 大模型对我的工作给予了很大的帮助"
+                defaultContent="In 2023, generative AI grand models have helped me a lot in my work"
                 placeholder="Type your text here"
             />
 

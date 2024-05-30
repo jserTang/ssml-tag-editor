@@ -6,4 +6,27 @@
         padding: 0 12px;
         border: 1px solid #eee;
     }
+    .ssml-tag-editor-demo__tools button {
+        margin-right: 6px;
+        padding: 4px 8px;
+        color: #fff;
+        outline: none;
+        border-radius: 4px;
+        border: 0 none;
+    }
+    .menu-sub {
+        background-color: #2cb24e;
+    }
+    .menu-break {
+        background-color: #3F2088;
+    }
+    .menu-ph {
+        background-color: #FAB400;
+    }
+    .menu-number {
+        background-color: #1e6ee6;
+    }
+    .ssml-tag-editor-demo__result {
+        margin-top: 8px;
+    }
 }

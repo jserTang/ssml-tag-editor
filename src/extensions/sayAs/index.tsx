@@ -1,8 +1,10 @@
 import './index.scss';
-import React, { useEffect } from 'react';
+import * as React from 'react';
 import { createTag } from '../../createTag';
+import { useTagRemove } from '../../hooks';
+import { TagWrapper } from '../../components';
 import { NodeViewWrapper } from '@tiptap/react';
-import { ssmlTags, throttle } from '../../utils';
+import { ssmlTags } from '../../utils';
 import { NumberInterpretSelector } from '../../components/numberInterpretSelector';
 import { IReactNodeProps, IMarkerSelectorProps, NumberInterpret } from '../../types';
 
@@ -10,24 +12,17 @@ const sayAsAttrsTags: { [key: string]: (props: IMarkerSelectorProps) => JSX.Elem
     'interpret-as': NumberInterpretSelector,
 };
 
-const SatAsTagNode = (props: IReactNodeProps) => {
-    const remove = (_attrName?: string) => {
-        props.editor.chain().deleteCurrentNode().run();
-    };
+let enterdownTime = Date.now();
+const SayAsTagNode = (props: IReactNodeProps) => {
 
-    useEffect(() => {
-        let pos = props.getPos();
-        const listen = throttle(() => {
-            pos = props.getPos() || pos;
-        }, 100);
-        props.editor.on('update', listen);
-        return () => {
-            const { from, to } = props.editor.state.selection;
-            const onlyDeleteTag = pos === from && from === to;
-            onlyDeleteTag && props.editor.chain().focus(from).insertContent(`${props.node.attrs.text}`).run();
-            props.editor.off('update', listen);
-        };
-    }, []);
+    useTagRemove(props, () => enterdownTime);
+
+    const onEnterdown = React.useCallback((time: number) => (enterdownTime = time), []);
+
+    const onMouseDown = () => {
+        const pos = props.getPos();
+        props.editor.commands.focus(pos + 1);
+    };
 
     const renderAttrs = () => {
         const { node } = props;
@@ -37,24 +32,19 @@ const SatAsTagNode = (props: IReactNodeProps) => {
             if (Object.prototype.hasOwnProperty.call(attrs, key)) {
                 if (!!sayAsAttrsTags[key]) {
                     const SayAsAttrsTag = sayAsAttrsTags[key];
-                    attrTags.push(<SayAsAttrsTag key={key} {...props} remove={remove} />);
+                    attrTags.push(<SayAsAttrsTag key={key} {...props} />);
                 }
             }
         }
         return attrTags;
     };
 
-    const onFocus = () => {
-        const pos = props.getPos();
-        props.editor.commands.focus(pos);
-    };
-
     return (
         <NodeViewWrapper>
-            <span onClick={onFocus} className="react-node-ssml-tag say-as">
+            <TagWrapper className="react-node-ssml-tag say-as" onMouseDown={onMouseDown} onEnterdown={onEnterdown}>
                 <span data-name="say-as">{props.node.attrs.text}</span>
                 <span className="attrs-mark">{renderAttrs()}</span>
-            </span>
+            </TagWrapper>
         </NodeViewWrapper>
     );
 };
@@ -81,5 +71,5 @@ export const SayAsTag = createTag<{ 'interpret-as': NumberInterpret }>(
                 },
         },
     },
-    SatAsTagNode,
+    SayAsTagNode,
 );

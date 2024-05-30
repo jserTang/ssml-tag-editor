@@ -1,6 +1,8 @@
 .react-node-ssml-tag.sub {
-    span[data-name='sub'] {
-      border-bottom: 2px solid #1e6ee6;
-    }
+  .ssml-tag-value-select__value {
+    background-color: #2cb24e;
   }
-  
+  span[data-name="sub"] {
+    border-bottom: 2px solid #2cb24e;
+  }
+}

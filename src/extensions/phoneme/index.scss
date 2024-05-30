@@ -1,5 +1,13 @@
 .react-node-ssml-tag.phoneme {
+  cursor: pointer;
   span[data-name='phoneme'] {
-    border-bottom: 2px solid #1e6ee6;
+    line-height: 16px;
+    border-bottom: 2px solid #FAB400;
+    &.editing {
+      background: #FFBD2B3B;
+    }
+  }
+  .ssml-tag-value-select__value {
+    background: #FAB400;
   }
 }

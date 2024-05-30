@@ -1,6 +1,6 @@
 {
   "name": "ssml-tag-editor",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "SSML tag editor;Generate SSML with rich text editing;Text-to-Speech editor",
   "main": "./dist/index.js",
   "types": "./dist/src/index.d.ts",
@@ -10,24 +10,24 @@
   ],
   "scripts": {
     "start": "npx webpack serve --node-env=development --progress --config ./webpack.config.js",
-    "build:watch": "rm -rf dist && npx webpack --watch --node-env=production --progress --config ./webpack.config.js",
-    "build": "rm -rf dist && npx webpack --node-env=production --progress --config ./webpack.config.js && tsc --emitDeclarationOnly",
+    "build:watch": "npx webpack --watch --node-env=production --progress --config ./webpack.config.js",
+    "build": "npx webpack --node-env=production --progress --config ./webpack.config.js && tsc --emitDeclarationOnly && npm link",
     "pub": "npm run build && npm publish"
   },
   "dependencies": {
-    "@tiptap/extension-character-count": "2.0.4",
-    "@tiptap/extension-color": "2.0.3",
-    "@tiptap/extension-placeholder": "2.0.3",
-    "@tiptap/extension-text-style": "2.0.3",
-    "@tiptap/pm": "2.0.3",
-    "@tiptap/react": "2.0.3",
-    "@tiptap/starter-kit": "2.0.3",
-    "@tiptap/suggestion": "2.0.3",
-    "postcss-loader": "^7.3.3",
-    "react": "18.0.0",
-    "react-dom": "18.0.0"
+    "@tiptap/extension-character-count": "2.2.4",
+    "@tiptap/extension-color": "2.2.4",
+    "@tiptap/extension-placeholder": "2.2.4",
+    "@tiptap/extension-text-style": "2.2.4",
+    "@tiptap/pm": "2.2.4",
+    "@tiptap/react": "2.2.4",
+    "@tiptap/starter-kit": "2.2.4",
+    "@tiptap/suggestion": "2.2.4"
   },
   "devDependencies": {
+    "react": "18.0.0",
+    "react-dom": "18.0.0",
+    "postcss-loader": "^7.3.3",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.11",
     "@types/react": "18.0.0",
     "@types/react-dom": "18.0.0",
@@ -48,8 +48,8 @@
     "webpack-dev-server": "^4.15.1"
   },
   "peerDependencies": {
-    "react": ">=16.9.0",
-    "react-dom": ">=16.9.0"
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
   },
   "repository": {
     "type": "git",
@@ -61,7 +61,7 @@
     "SSML",
     "SSML editor"
   ],
-  "author": "xingwang",
+  "author": "jserTang",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/jserTang/ssml-tag-editor/issues"

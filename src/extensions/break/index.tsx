@@ -1,22 +1,32 @@
 import './index.scss';
-import React from 'react';
+import * as React from 'react';
+import { ssmlTags } from '../../utils';
 import { createTag } from '../../createTag';
 import { NodeViewWrapper } from '@tiptap/react';
-import { ssmlTags } from '../../utils';
 import { IReactNodeProps } from '../../types';
-import { BreakTimeSelector } from '../../components/breakTimeSelector';
+import { BreakTimeInput } from '../../components/breakTimeInput';
 
 const BreakTagNode = (props: IReactNodeProps) => {
-    const onFocus = () => {
+    const { node } = props;
+    const { attrs } = node;
+    const onChange = (time: string) => {
+        props.updateAttributes({
+            time,
+        });
+    };
+
+    const onMouseDown = (e: React.MouseEvent) => {
         const pos = props.getPos();
-        props.editor.commands.focus(pos);
+        props.editor.commands.focus(pos + 1);
+        e.preventDefault();
+        return false;
     };
 
     return (
         <NodeViewWrapper>
-            <span onClick={onFocus} className="react-node-ssml-tag break">
+            <span className="react-node-ssml-tag break" onMouseDown={onMouseDown}>
                 <span className="attrs-mark">
-                    <BreakTimeSelector {...props} />
+                    <BreakTimeInput {...props} value={attrs.time} onChange={onChange} />
                 </span>
             </span>
         </NodeViewWrapper>

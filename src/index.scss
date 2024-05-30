@@ -1,111 +1,123 @@
-.ant-message {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    color: rgba(0, 0, 0, 0.85);
-    font-size: 14px;
-    font-variant: tabular-nums;
-    line-height: 1.5715;
-    list-style: none;
-    font-feature-settings: 'tnum';
-    position: fixed;
-    top: 8px;
-    left: 0;
-    z-index: 1010;
-    width: 100%;
-    pointer-events: none;
-}
-.ant-message-notice {
-    padding: 8px;
-    text-align: center;
-}
-.ant-message-notice-content {
-    display: inline-block;
-    padding: 10px 16px;
-    background: #fff;
-    border-radius: 2px;
-    box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
-    pointer-events: all;
-}
-.ant-message-success .anticon {
-    color: #52c41a;
-}
-.ant-message-error .anticon {
-    color: #ff4d4f;
+
+.flex--start {
+  display: flex;
+  justify-content: flex-start;
 }
 
-.ant-message-warning .anticon {
-    margin-right: 8px;
-    color: #faad14;
+.flex--center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex--end--center {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.flex--start--center {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.flex--between--center {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.flex--between--start {
+  display: flex;
+  justify-content: space-between;
+}
+
+.flex--1 {
+  flex: 1;
+  min-width: 0;
 }
 
 .ssml-tag-editor {
-    font-size: 14px;
+  font-size: 14px;
 
-    .ProseMirror {
-        min-height: 200px;
-        outline: none;
+  .ProseMirror {
+    min-height: 200px;
+    outline: none;
+  }
+
+  line-height: 20px;
+
+  .attrs-mark {
+    user-select: none !important;
+  }
+  .react-node-ssml-tag {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    white-space: nowrap;
+
+    .ssml-tag-value-select {
+      position: relative;
+      margin: 0 2px;
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 20px;
+      color: #fff;
+      cursor: pointer;
     }
+    .ssml-tag-value-select__value {
+      padding: 2px 4px;
+      background-color: #1e6ee6;
+      border-radius: 2px;
+    }
+    .ssml-tag-value-select__options {
+      position: absolute;
+      top: calc(100% + 2px);
+      left: 0;
+      z-index: 1;
+      min-width: 96px;
+      padding: 8px 0;
+      white-space: nowrap;
+      background: #fff;
+      border: 1px solid #eee;
+      border-radius: 4px;
+      box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.06);
 
-    line-height: 20px;
+      .ssml-tag-value-select__options__item {
+        padding: 8px 16px;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 20px;
+        color: #222;
+        cursor: pointer;
 
+        &:hover {
+          background-color: #f5f5f5;
+        }
+
+        &.active {
+          background-color: #f5f5f5;
+        }
+      }
+    }
+  }
+  .node-say-as,
+  .node-break,
+  .node-phoneme,
+  .node-sub {
+    display: inline-block;
+    cursor: default;
     .attrs-mark {
-        user-select: none !important;
+      cursor: pointer;
     }
-    .react-node-ssml-tag {
-        position: relative;
-        display: inline-flex;
-        align-items: center;
-        justify-content: start;
-        white-space: nowrap;
+  }
 
-        .ssml-tag-value-select {
-            position: relative;
-            margin: 0 2px;
-            font-size: 12px;
-            font-weight: 600;
-            line-height: 20px;
-            color: #fff;
-            cursor: pointer;
-        }
-        .ssml-tag-value-select__value {
-            padding: 2px 4px;
-            background-color: #1e6ee6;
-            border-radius: 2px;
-        }
-        .ssml-tag-value-select__options {
-            position: absolute;
-            top: calc(100% + 2px);
-            left: 0;
-            z-index: 1;
-            min-width: 96px;
-            padding: 8px 0;
-            white-space: nowrap;
-            background: #fff;
-            border: 1px solid #eee;
-            border-radius: 4px;
-            box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.06);
-
-            .ssml-tag-value-select__options__item {
-                padding: 8px 16px;
-                font-size: 14px;
-                font-style: normal;
-                font-weight: 400;
-                line-height: 20px;
-                color: #222;
-                cursor: pointer;
-
-                &:hover {
-                    background-color: #f5f5f5;
-                }
-
-                &.active {
-                    background-color: #f5f5f5;
-                }
-            }
-        }
-    }
-    .node-say-as, .node-break, .node-phoneme, .node-sub {
-        display: inline-block;
-    }
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    margin: 0;
+    -webkit-appearance: none;
+  }
 }

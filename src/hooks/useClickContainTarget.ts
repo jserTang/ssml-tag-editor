@@ -13,5 +13,5 @@ export const useClickContainTarget = (target: HTMLElement | null, callback: (con
         return () => {
             document.removeEventListener('click', handleClick);
         };
-    }, []);
+    }, [target]);
 };

@@ -1,0 +1,30 @@
+.ssml-tag-value-select.time {
+    .ssml-tag-value-select__inputbox {
+        .ssml-tag-value-select__inputbox__inner {
+            padding: 0 8px;
+            color: #979797;
+            border-radius: 4px;
+            border: 1px solid #E4A500;
+            svg {
+                width: 20px;
+                height: 20px;
+            }
+        }
+        input {
+            min-width: initial;
+            width: 80px;
+            height: 32px;
+            border: 0 none;
+            text-align: right;
+            color: #222;
+        }
+        .seconds {
+            margin-top: 1px;
+        }
+    }
+}
+.locale-cn, .locale-tw {
+    .ssml-tag-value-select.time .ssml-tag-value-select__inputbox input {
+        width: 60px;
+    }
+}

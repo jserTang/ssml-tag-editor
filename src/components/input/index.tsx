@@ -1,33 +1,33 @@
 import './index.scss';
 import { If } from '../if';
 import { IReactNodeProps } from '../../types';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { forwardRef, useRef, useImperativeHandle } from 'react';
 
 interface IProps {
     value: string;
+    showInput: boolean;
+    placeholder?: string;
     onChange: (value: string) => void;
-    onRemove: VoidFunction;
+    onEnd: () => void;
 }
 
-export const SSMLInput = (props: IReactNodeProps & IProps) => {
-    const [showInput, setShowInput] = useState(true);
-    const valueRef = useRef(props.value);
+export interface IInputRefHandler {
+    focus: VoidFunction;
+}
+
+export const SSMLInput = forwardRef((props: IReactNodeProps & IProps, ref: React.Ref<IInputRefHandler>) => {
+    const { placeholder = '', onEnd } = props;
+    const valueRef = useRef(props?.value);
     const inputRef = useRef<HTMLInputElement>(null);
-    valueRef.current = props.value;
+    valueRef.current = props?.value;
 
-    useEffect(() => {
-        if (showInput) {
-            inputRef.current.focus();
-        } else if (!valueRef.current.trim()) {
-            props.onRemove();
-        }
-    }, [showInput]);
-
-    const onWrapClick = () => {
-        setTimeout(() => {
-            setShowInput(true);
-        }, 60);
-    };
+    useImperativeHandle(ref, () => ({
+        focus() {
+            setTimeout(() => {
+                inputRef.current && inputRef.current.focus();
+            }, 35);
+        },
+    }));
 
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         props.onChange(e.target.value);
@@ -35,26 +35,34 @@ export const SSMLInput = (props: IReactNodeProps & IProps) => {
 
     const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
-            setShowInput(false);
+            if (!e.currentTarget.value.trim()) {
+                props.deleteNode();
+            } else {
+                onEnd();
+            }
+            props.editor.commands.focus(props.getPos() + 1);
         }
+        e.stopPropagation();
     };
 
     return (
-        <span className="ssml-tag-value-select" onClick={onWrapClick}>
-            <If condition={!showInput}>
+        <span className="ssml-tag-value-select">
+            <If condition={!!props.value}>
                 <span className="ssml-tag-value-select__value">{props.value}</span>
             </If>
-            <If condition={showInput}>
-                <input
-                    ref={inputRef}
-                    className="ssml-tag-value-select__input"
-                    autoFocus
-                    type="text"
-                    value={props.value}
-                    onChange={onChange}
-                    onKeyDown={onKeyDown}
-                />
+            <If condition={props.showInput}>
+                <div className="ssml-tag-value-select__inputbox">
+                    <input
+                        ref={inputRef}
+                        autoFocus
+                        type="text"
+                        value={props.value}
+                        placeholder={placeholder}
+                        onChange={onChange}
+                        onKeyDown={onKeyDown}
+                    />
+                </div>
             </If>
         </span>
     );
-};
+});

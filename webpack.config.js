@@ -20,15 +20,14 @@ module.exports = (env, arg) => {
       path: path.resolve(__dirname, "dist"),
       clean: true,
       library: {
-        // name: "ssml-tag-editor",
-        type: "module",
+        type: "umd",
       },
     },
-    experiments: {
-      outputModule: true,
-    },
+    // experiments: {
+    //   outputModule: true,
+    // },
     resolve: {
-      symlinks: false,
+      symlinks: true,
       extensions: [".tsx", ".ts", ".js"],
     },
     module: {

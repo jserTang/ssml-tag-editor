@@ -7,13 +7,17 @@ import React, { useCallback, useContext, useState } from 'react';
 import { useClickContainTarget } from '../../hooks/useClickContainTarget';
 
 export const NumberInterpretSelector = (props: IMarkerSelectorProps) => {
-    const {
-        state: { language, i18n },
-    } = useContext(SSMLTagEditorContext);
-    const lang = createLang(language, i18n);
     const [showSelector, setShowSelector] = useState(false);
     const [wrap, setWrap] = useState<HTMLSpanElement | null>(null);
-    const currentInterpretAs = props.node.attrs['interpret-as'];
+
+  const {
+    state: { language, i18n },
+  } = useContext(SSMLTagEditorContext);
+    const lang = createLang(language, i18n);
+
+    useClickContainTarget(wrap, () => {
+        setShowSelector(false);
+    });
 
     const numberInterpretValueMap: { [key: string]: any } = {
         digits: lang('Expanded'),
@@ -21,12 +25,14 @@ export const NumberInterpretSelector = (props: IMarkerSelectorProps) => {
         cardinal: lang('Number by number'),
     };
 
-    const currentValue = numberInterpretValueMap[currentInterpretAs];
     const options = [
         { key: 'digits', label: numberInterpretValueMap['digits'] },
         { key: 'cardinal', label: numberInterpretValueMap['cardinal'] },
         { key: 'remove', label: lang('DELETE') },
     ];
+
+    const currentInterpretAs = props.node.attrs['interpret-as'];
+    const currentValue = numberInterpretValueMap[currentInterpretAs];
 
     const wrapRef = useCallback((node) => {
         if (node) {
@@ -34,21 +40,19 @@ export const NumberInterpretSelector = (props: IMarkerSelectorProps) => {
         }
     }, []);
 
+    if (!props || !currentValue) {
+        return null;
+    }
     const onWrapClick = () => {
         setTimeout(() => {
             setShowSelector(true);
         }, 60);
     };
 
-    useClickContainTarget(wrap, () => {
-        setShowSelector(false);
-    });
-
     const onSelectInterpret = (type: string) => {
         return () => {
             if (type === 'remove') {
                 props.deleteNode();
-                props.remove('interpret-as');
                 return;
             } else {
                 props.updateAttributes({
@@ -76,10 +80,6 @@ export const NumberInterpretSelector = (props: IMarkerSelectorProps) => {
             );
         });
     };
-
-    if (!currentValue) {
-        return null;
-    }
 
     return (
         <span className="ssml-tag-value-select" ref={wrapRef} onClick={onWrapClick}>
